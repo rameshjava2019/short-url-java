@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Short URL</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<main class="card">
+    <h1>Short URL</h1>
+    <p class="subtitle">Paste a long link and get a short one you can share.</p>
+
+    <!-- th:action makes Thymeleaf add the hidden CSRF token field automatically -->
+    <form th:action="@{/shorten}" th:object="${form}" method="post" novalidate>
+        <label for="url">Long URL</label>
+        <input id="url" type="url" th:field="*{url}" placeholder="https://example.com/a/very/long/link"
+               maxlength="2048" autocomplete="off" required>
+        <p class="field-error" th:if="${#fields.hasErrors('url')}" th:errors="*{url}"></p>
+
+        <label for="alias">Custom alias <span class="optional">(optional)</span></label>
+        <div class="alias-row">
+            <span class="prefix" th:text="${host} + '/'">localhost:8080/</span>
+            <input id="alias" type="text" th:field="*{alias}" placeholder="my-link" maxlength="30" autocomplete="off">
+        </div>
+        <p class="field-error" th:if="${#fields.hasErrors('alias')}" th:errors="*{alias}"></p>
+
+        <button type="submit">Shorten</button>
+    </form>
+
+    <p class="error" role="alert" th:if="${error}" th:text="${error}"></p>
+
+    <section class="result" th:if="${created}" aria-live="polite">
+        <span class="label">Your short link</span>
+        <div class="result-row">
+            <a id="short-link" th:href="${created.shortUrl}" th:text="${created.shortUrl}" target="_blank" rel="noopener noreferrer"></a>
+            <button id="copy" type="button" class="secondary" th:attr="data-url=${created.shortUrl}">Copy</button>
+        </div>
+        <p class="original">→ <span th:text="${created.originalUrl}"></span></p>
+    </section>
+
+    <section class="history" th:unless="${#lists.isEmpty(recent)}">
+        <div class="history-header">
+            <h2>Your recent links</h2>
+            <a class="link-button" th:href="@{/}">Refresh clicks</a>
+        </div>
+        <ul>
+            <li th:each="link : ${recent}">
+                <a th:href="${link.shortUrl}" th:text="${link.shortUrl}" target="_blank" rel="noopener noreferrer"></a>
+                <span class="clicks" th:text="${link.clickCount} + (${link.clickCount} == 1 ? ' click' : ' clicks')"></span>
+                <div class="original" th:text="${link.originalUrl}"></div>
+            </li>
+        </ul>
+    </section>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

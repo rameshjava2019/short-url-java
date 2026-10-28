@@ -1,0 +1,3 @@
+app:
+  base-url: http://short.test
+  create-rate-limit: 1000

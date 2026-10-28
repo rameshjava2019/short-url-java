@@ -1,0 +1,30 @@
+server:
+  port: ${PORT:8080}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: strict
+        secure: ${SECURE_COOKIES:false}   # set to true behind HTTPS
+
+spring:
+  application:
+    name: short-url
+  mongodb:
+    uri: ${MONGODB_URI:mongodb://127.0.0.1:27017/short-url}
+  data:
+    mongodb:
+      auto-index-creation: true   # creates the unique index on "code"
+  thymeleaf:
+    cache: ${THYMELEAF_CACHE:true}
+
+app:
+  base-url: ${BASE_URL:http://localhost:${server.port}}
+  create-rate-limit: ${CREATE_RATE_LIMIT:100}
+
+# MongoDB version the embedded database downloads (tests and -Pembedded-mongo only)
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 7.0.14

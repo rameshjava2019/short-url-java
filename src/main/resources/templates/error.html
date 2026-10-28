@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Error</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<main class="card">
+    <h1 th:text="${status == 404 ? 'Page not found' : (status == 403 ? 'Request rejected' : 'Something went wrong')}">Error</h1>
+    <p th:if="${status == 403}">The form expired or was not submitted from this site. Please reload the page and try again.</p>
+    <p th:unless="${status == 403}">Please try again later.</p>
+    <p><a th:href="@{/}">Back to Short URL</a></p>
+</main>
+</body>
+</html>

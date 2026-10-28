@@ -1,0 +1,4 @@
+{
+  "alex": ["product-owner", "release-manager"],
+  "sam": ["security-reviewer", "tech-lead"]
+}
